@@ -608,6 +608,21 @@ state_packets!(
                 field velocity_y: i16 =,
                 field velocity_z: i16 =,
             }
+            packet SpawnObject_HeadYaw {
+                field entity_id: VarInt =,
+                field uuid: UUID =,
+                field ty: VarInt =, //1.14 changed u8 to VarInt
+                field x: f64 =,
+                field y: f64 =,
+                field z: f64 =,
+                field pitch: i8 =,
+                field yaw: i8 =,
+                field head_yaw: i8 =,
+                field data: VarInt =,
+                field velocity_x: i16 =,
+                field velocity_y: i16 =,
+                field velocity_z: i16 =,
+            }
             /// SpawnExperienceOrb spawns a single experience orb into the world when
             /// it is in range of the client. The count controls the amount of experience
             /// gained when collected.
@@ -1268,6 +1283,34 @@ state_packets!(
             }
             /// Particle spawns particles at the target location with the various
             /// modifiers.
+            packet Particle_f64_VarInt {
+                field particle_id: VarInt =,
+                field long_distance: bool =,
+                field x: f64 =,
+                field y: f64 =,
+                field z: f64 =,
+                field offset_x: f32 =,
+                field offset_y: f32 =,
+                field offset_z: f32 =,
+                field speed: f32 =,
+                field count: i32 =,
+                field block_state: VarInt = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 2 || p.particle_id.0 == 3 || p.particle_id.0 == 24),
+                field red: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 14 || p.particle_id.0 == 15),
+                field green: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 14 || p.particle_id.0 == 15),
+                field blue: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 14 || p.particle_id.0 == 15),
+                field scale: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 14 || p.particle_id.0 == 15),
+                field to_red: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 15),
+                field to_green: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 15),
+                field to_blue: f32 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 15),
+                field item: Option<nbt::NamedTag> = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 35),
+                field origin_x: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field origin_y: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field origin_z: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field dest_x: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field dest_y: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field dest_z: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+                field ticks: f64 = when(|p: &Particle_f64_VarInt| p.particle_id.0 == 36),
+            }
             packet Particle_f64 {
                 field particle_id: i32 =,
                 field long_distance: bool =,
@@ -2363,6 +2406,9 @@ state_packets!(
                 field block: VarInt =,
                 field status: VarInt =,
                 field successful: bool =,
+            }
+            packet AcknowledgeBlockChange {
+                field sequence_id: VarInt =,
             }
             packet UpdateLight_Arrays {
                 field chunk_x: VarInt =,
